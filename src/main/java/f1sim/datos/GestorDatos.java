@@ -180,15 +180,34 @@ public class GestorDatos {
     public static List<Usuario> cargarUsuarios() {
         Type tipo = new TypeToken<List<Usuario>>() {}.getType();
         List<Usuario> lista = cargarLista("usuarios.json", tipo);
+        boolean modificado = false;
         if (lista.isEmpty()) {
             lista.add(new Usuario(1, "admin", "admin123", Usuario.Rol.ADMIN, "Administrador F1"));
             lista.add(new Usuario(2, "usuario", "user123", Usuario.Rol.USUARIO, "Usuario Estandar"));
+            modificado = true;
+        }
+
+        boolean tieneVerstappen = false;
+        boolean tieneLeclerc = false;
+        for (Usuario u : lista) {
+            if ("verstappen".equalsIgnoreCase(u.username)) tieneVerstappen = true;
+            if ("leclerc".equalsIgnoreCase(u.username)) tieneLeclerc = true;
+        }
+        if (!tieneVerstappen) {
             lista.add(new Usuario(3, "verstappen", "123", Usuario.Rol.USUARIO, "Max Verstappen"));
+            modificado = true;
+        }
+        if (!tieneLeclerc) {
             lista.add(new Usuario(4, "leclerc", "123", Usuario.Rol.USUARIO, "Charles Leclerc"));
+            modificado = true;
+        }
+
+        if (modificado) {
             guardarUsuarios(lista);
         }
         return lista;
     }
+
 
 
     // ---------- DATOS INICIALES DE LA ESPECIFICACION ----------
