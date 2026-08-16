@@ -11,6 +11,8 @@ public class Piloto {
     public int victorias = 0;
     public int podios = 0;
     public int puntos = 0;
+    public String vehiculoAsignado = ""; // Modelo de vehículo asignado al piloto
+
 
     public Piloto() {
     }

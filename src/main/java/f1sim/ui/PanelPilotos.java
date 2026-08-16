@@ -31,7 +31,7 @@ public class PanelPilotos extends JPanel {
         setBackground(F1Theme.BG_DARK);
         setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
-        String[] columnas = {"ID", "Nombre", "Equipo", "Rol", "Exp. (anos)", "Habilidad (0-100)", "Victorias", "Podios", "Puntos"};
+        String[] columnas = {"ID", "Nombre", "Equipo", "Vehiculo", "Rol", "Exp. (anos)", "Habilidad (0-100)", "Victorias", "Podios", "Puntos"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int fila, int columna) {
@@ -106,9 +106,11 @@ public class PanelPilotos extends JPanel {
     private void refrescarTabla(List<Piloto> lista) {
         modeloTabla.setRowCount(0);
         for (Piloto p : lista) {
-            modeloTabla.addRow(new Object[]{p.id, p.nombre, p.equipo, p.rol, p.experiencia, p.nivelHabilidad, p.victorias, p.podios, p.puntos});
+            String vehiculoNombre = p.vehiculoAsignado != null && !p.vehiculoAsignado.trim().isEmpty() ? p.vehiculoAsignado : "Sin Asignar";
+            modeloTabla.addRow(new Object[]{p.id, p.nombre, p.equipo, vehiculoNombre, p.rol, p.experiencia, p.nivelHabilidad, p.victorias, p.podios, p.puntos});
         }
     }
+
 
     private void buscarPilotos() {
         String texto = campoBusqueda.getText().trim().toLowerCase();
@@ -257,6 +259,8 @@ public class PanelPilotos extends JPanel {
 
                 // Actualizar la lista de asignación del vehículo según el equipo
                 String vehiculoSeleccionado = (String) campoVehiculo.getSelectedItem();
+                piloto.vehiculoAsignado = "Todos los del equipo".equals(vehiculoSeleccionado) ? "" : vehiculoSeleccionado;
+
                 if (vehiculos != null) {
                     for (Vehiculo v : vehiculos.values()) {
                         if (v.equipo != null && v.equipo.equalsIgnoreCase(piloto.equipo)) {
@@ -269,6 +273,7 @@ public class PanelPilotos extends JPanel {
                         }
                     }
                 }
+
 
                 refrescarTabla(new ArrayList<>(pilotos.values()));
             } catch (NumberFormatException ex) {
