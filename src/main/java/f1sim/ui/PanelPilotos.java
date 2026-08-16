@@ -175,6 +175,17 @@ public class PanelPilotos extends JPanel {
                 int nuevoId = generarNuevoId();
                 Piloto nuevo = new Piloto(nuevoId, nombre, equipo, rol, experiencia, habilidad, vics, pods, pts);
                 pilotos.put(nuevoId, nuevo);
+
+                // Asignar al vehículo del mismo equipo
+                if (vehiculos != null) {
+                    for (Vehiculo v : vehiculos.values()) {
+                        if (v.equipo != null && v.equipo.equalsIgnoreCase(equipo)) {
+                            if (v.pilotos == null) v.pilotos = new ArrayList<>();
+                            if (!v.pilotos.contains(nuevoId)) v.pilotos.add(nuevoId);
+                        }
+                    }
+                }
+
                 refrescarTabla(new ArrayList<>(pilotos.values()));
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Los campos numericos deben contener valores validos.");
@@ -203,9 +214,27 @@ public class PanelPilotos extends JPanel {
         JTextField campoPodios = new JTextField(String.valueOf(piloto.podios));
         JTextField campoPuntos = new JTextField(String.valueOf(piloto.puntos));
 
+        // Obtener vehículos registrados para el equipo del piloto
+        List<String> opcionesVehiculos = new ArrayList<>();
+        opcionesVehiculos.add("Todos los del equipo");
+        String vehiculoActual = "Todos los del equipo";
+        if (vehiculos != null) {
+            for (Vehiculo v : vehiculos.values()) {
+                if (v.equipo != null && v.equipo.equalsIgnoreCase(piloto.equipo)) {
+                    opcionesVehiculos.add(v.modelo);
+                    if (v.pilotos != null && v.pilotos.contains(piloto.id)) {
+                        vehiculoActual = v.modelo;
+                    }
+                }
+            }
+        }
+        JComboBox<String> campoVehiculo = new JComboBox<>(opcionesVehiculos.toArray(new String[0]));
+        campoVehiculo.setSelectedItem(vehiculoActual);
+
         Object[] mensaje = {
                 "Nombre:", campoNombre,
                 "Equipo:", campoEquipo,
+                "Vehiculo del Equipo:", campoVehiculo,
                 "Rol:", campoRol,
                 "Experiencia (anos):", campoExperiencia,
                 "Nivel Habilidad (0-100):", campoHabilidad,
@@ -225,12 +254,29 @@ public class PanelPilotos extends JPanel {
                 piloto.victorias = Integer.parseInt(campoVictorias.getText().trim());
                 piloto.podios = Integer.parseInt(campoPodios.getText().trim());
                 piloto.puntos = Integer.parseInt(campoPuntos.getText().trim());
+
+                // Actualizar la lista de asignación del vehículo según el equipo
+                String vehiculoSeleccionado = (String) campoVehiculo.getSelectedItem();
+                if (vehiculos != null) {
+                    for (Vehiculo v : vehiculos.values()) {
+                        if (v.equipo != null && v.equipo.equalsIgnoreCase(piloto.equipo)) {
+                            if (v.pilotos == null) v.pilotos = new ArrayList<>();
+                            if ("Todos los del equipo".equals(vehiculoSeleccionado) || v.modelo.equalsIgnoreCase(vehiculoSeleccionado)) {
+                                if (!v.pilotos.contains(piloto.id)) v.pilotos.add(piloto.id);
+                            } else {
+                                v.pilotos.remove(Integer.valueOf(piloto.id));
+                            }
+                        }
+                    }
+                }
+
                 refrescarTabla(new ArrayList<>(pilotos.values()));
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Los campos numericos deben contener valores validos.");
             }
         }
     }
+
 
     private void eliminarPiloto() {
         if (!esAdmin) return;
