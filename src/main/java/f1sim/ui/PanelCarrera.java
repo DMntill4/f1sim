@@ -671,10 +671,9 @@ public class PanelCarrera extends JPanel {
     }
 
     private String formatearTiempo(double segs) {
-        int mins = (int) (segs / 60);
-        double s = segs - (mins * 60);
-        return String.format("%d:%06.3f", mins, s);
+        return FormateadorF1.formatearTiempoVuelta(segs);
     }
+
 
     private void detenerCarrera(String mensajeEstado) {
         for (HiloPiloto h : hilosActivos) {

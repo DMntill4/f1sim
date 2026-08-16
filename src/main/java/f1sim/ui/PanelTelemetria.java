@@ -55,9 +55,18 @@ public class PanelTelemetria extends JPanel {
         int graphWidth = width - (margin * 2);
         int graphHeight = height - (margin * 2);
 
-        double minTime = tiemposVuelta.stream().min(Double::compare).orElse(60.0);
-        double maxTime = tiemposVuelta.stream().max(Double::compare).orElse(120.0);
+        // Calcular tiempo mínimo y máximo mediante bucle for tradicional
+        double minTime = Double.MAX_VALUE;
+        double maxTime = Double.MIN_VALUE;
+        for (double t : tiemposVuelta) {
+            if (t < minTime) minTime = t;
+            if (t > maxTime) maxTime = t;
+        }
+        if (minTime == Double.MAX_VALUE) minTime = 60.0;
+        if (maxTime == Double.MIN_VALUE) maxTime = 120.0;
+
         double range = Math.max(1.0, maxTime - minTime);
+
 
         int prevX = margin;
         int prevY = height - margin - (int) (((tiemposVuelta.get(0) - minTime) / range) * graphHeight);

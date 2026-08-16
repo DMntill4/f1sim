@@ -257,20 +257,30 @@ public class PanelSimulacion extends JPanel {
             return;
         }
 
-        filas.sort(Comparator.comparingDouble(fila -> (double) fila[4]));
+        // Ordenación por tiempo de menor a mayor (más rápido a más lento)
+        filas.sort(new Comparator<Object[]>() {
+            @Override
+            public int compare(Object[] o1, Object[] o2) {
+                double t1 = (Double) o1[4];
+                double t2 = (Double) o2[4];
+                return Double.compare(t1, t2);
+            }
+        });
 
         modeloResultados.setRowCount(0);
         int posicion = 1;
         for (Object[] fila : filas) {
+            double tiempoSegundos = (Double) fila[4];
             modeloResultados.addRow(new Object[]{
                     (posicion == 1 ? "P1 (POLE)" : "P" + posicion),
-                    fila[0], fila[1], fila[2], fila[3], formatearTiempo((double) fila[4])
+                    fila[0], fila[1], fila[2], fila[3], FormateadorF1.formatearTiempoVuelta(tiempoSegundos)
             });
             posicion++;
         }
 
         historialResultados.addAll(nuevosResultados);
     }
+
 
     private void guardarResultados() {
         if (modeloResultados.getRowCount() == 0) {
