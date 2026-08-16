@@ -9,21 +9,18 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            try {
-                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            } catch (Exception e) {
-                // Fallback
-            }
-
-            // Aplicar tema F1
-            F1Theme.applyGlobalTheme();
-
-            // Cargar datos iniciales de la especificacion si no existen
+            configurarApariencia();
             GestorDatos.cargarDatosIniciales();
-
-            // Iniciar aplicacion desplegando primero la Ventana de Login
-            VentanaLogin login = new VentanaLogin();
-            login.setVisible(true);
+            new VentanaLogin().setVisible(true);
         });
     }
+
+    private static void configurarApariencia() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception ignored) {
+        }
+        F1Theme.applyGlobalTheme();
+    }
 }
+

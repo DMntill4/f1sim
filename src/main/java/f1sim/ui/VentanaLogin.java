@@ -113,31 +113,31 @@ public class VentanaLogin extends JFrame {
         String password = new String(campoPassword.getPassword()).trim();
 
         if (username.isEmpty() || password.isEmpty()) {
-            etiquetaMensaje.setText("Por favor ingresa usuario y contraseña.");
-            etiquetaMensaje.setForeground(F1Theme.F1_RED);
+            mostrarError("Por favor ingresa usuario y contraseña.");
             return;
         }
 
-        List<Usuario> lista = GestorDatos.cargarUsuarios();
-        Usuario usuarioAutenticado = null;
-
-        for (Usuario u : lista) {
-            if (u.username.equalsIgnoreCase(username) && u.password.equals(password)) {
-                usuarioAutenticado = u;
-                break;
-            }
+        Usuario usuarioAutenticado = buscarUsuario(username, password);
+        if (usuarioAutenticado == null) {
+            mostrarError("Usuario o contraseña incorrectos.");
+            return;
         }
 
-        if (usuarioAutenticado != null) {
-            final Usuario usr = usuarioAutenticado;
-            this.dispose();
-            SwingUtilities.invokeLater(() -> {
-                VentanaPrincipal principal = new VentanaPrincipal(usr);
-                principal.setVisible(true);
-            });
-        } else {
-            etiquetaMensaje.setText("Usuario o contraseña incorrectos.");
-            etiquetaMensaje.setForeground(F1Theme.F1_RED);
-        }
+        this.dispose();
+        final Usuario usr = usuarioAutenticado;
+        SwingUtilities.invokeLater(() -> new VentanaPrincipal(usr).setVisible(true));
     }
+
+    private Usuario buscarUsuario(String user, String pass) {
+        for (Usuario u : GestorDatos.cargarUsuarios()) {
+            if (u.username.equalsIgnoreCase(user) && u.password.equals(pass)) return u;
+        }
+        return null;
+    }
+
+    private void mostrarError(String msj) {
+        etiquetaMensaje.setText(msj);
+        etiquetaMensaje.setForeground(F1Theme.F1_RED);
+    }
+
 }

@@ -25,22 +25,13 @@ public class GestorPitStop {
     }
 
     public static ResultadoPitStop realizarParada(TipoNeumatico nuevoNeumatico, boolean cambiarAleron) {
-        double tiempoServicio = TIEMPO_CAMBIO_RUEDAS_BASE_SEG;
-        boolean fallo = false;
-        double retraso = 0.0;
+        boolean fallo = Math.random() < 0.10;
+        double retraso = fallo ? 1.5 + (Math.random() * 3.5) : 0.0;
+        double extraAleron = cambiarAleron ? 5.0 : 0.0;
 
-        // Probabilidad del 10% de fallo humano en el pit stop (tuerca atascada, etc.)
-        if (Math.random() < 0.10) {
-            fallo = true;
-            retraso = 1.5 + (Math.random() * 3.5); // Retraso entre 1.5 y 5.0 segundos
-            tiempoServicio += retraso;
-        }
-
-        if (cambiarAleron) {
-            tiempoServicio += 5.0; // Penalización por cambiar morro/alerón delantero
-        }
-
+        double tiempoServicio = TIEMPO_CAMBIO_RUEDAS_BASE_SEG + retraso + extraAleron;
         double tiempoTotal = TIEMPO_PIT_LANE_BASE_SEG + tiempoServicio;
+
         String detalle = String.format("Pit Stop: %.2fs en caja (Total: %.2fs)", tiempoServicio, tiempoTotal);
         if (fallo) {
             detalle += String.format(" [⚠️ FALLO EN TUERCA: +%.2fs]", retraso);
@@ -48,4 +39,5 @@ public class GestorPitStop {
 
         return new ResultadoPitStop(tiempoTotal, fallo, retraso, nuevoNeumatico, detalle);
     }
+
 }
