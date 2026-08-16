@@ -186,32 +186,15 @@ public class PanelPerfilUsuario extends JPanel {
         misResultados.clear();
         modeloTabla.setRowCount(0);
 
-        List<ResultadoClasificacion> todos = GestorDatos.cargarResultados();
-        String usrName = usuario != null ? usuario.username.toLowerCase() : "";
-        String nombreComp = usuario != null && usuario.nombreCompleto != null ? usuario.nombreCompleto.toLowerCase() : "";
-
         double mejorTiempo = Double.MAX_VALUE;
         String circuitoMejor = "N/A";
 
-        for (ResultadoClasificacion r : todos) {
-            boolean esMio = false;
-            if (r.piloto != null) {
-                String pilotoLower = r.piloto.toLowerCase();
-                if (pilotoLower.contains(usrName) || (!nombreComp.isEmpty() && pilotoLower.contains(nombreComp))) {
-                    esMio = true;
-                }
-            }
-            // Si el usuario es admin o encaja con el registro
-            if (esMio || (usuario != null && usuario.rol == Usuario.Rol.ADMIN)) {
+        for (ResultadoClasificacion r : GestorDatos.cargarResultados()) {
+            if (esResultadoDeUsuario(r)) {
                 misResultados.add(r);
                 modeloTabla.addRow(new Object[]{
-                        r.fecha,
-                        r.circuito,
-                        r.vehiculo,
-                        r.clima,
-                        r.modo,
-                        r.cargaAerodinamica,
-                        r.presionNeumaticos,
+                        r.fecha, r.circuito, r.vehiculo, r.clima, r.modo,
+                        r.cargaAerodinamica, r.presionNeumaticos,
                         FormateadorF1.formatearTiempoVuelta(r.tiempoVueltaSegundos)
                 });
 
@@ -223,14 +206,19 @@ public class PanelPerfilUsuario extends JPanel {
         }
 
         lblTotalSimulaciones.setText(String.valueOf(misResultados.size()));
-        if (mejorTiempo != Double.MAX_VALUE) {
-            lblMejorTiempo.setText(FormateadorF1.formatearTiempoVuelta(mejorTiempo));
-            lblCircuitoFavorito.setText(circuitoMejor);
-        } else {
-            lblMejorTiempo.setText("--:--.---");
-            lblCircuitoFavorito.setText("Sin registros");
-        }
+        lblMejorTiempo.setText(mejorTiempo != Double.MAX_VALUE ? FormateadorF1.formatearTiempoVuelta(mejorTiempo) : "--:--.---");
+        lblCircuitoFavorito.setText(mejorTiempo != Double.MAX_VALUE ? circuitoMejor : "Sin registros");
     }
+
+    private boolean esResultadoDeUsuario(ResultadoClasificacion r) {
+        if (usuario != null && usuario.rol == Usuario.Rol.ADMIN) return true;
+        if (r.piloto == null || usuario == null) return false;
+        String pilotoLower = r.piloto.toLowerCase();
+        String usrName = usuario.username.toLowerCase();
+        String nombreComp = usuario.nombreCompleto != null ? usuario.nombreCompleto.toLowerCase() : "";
+        return pilotoLower.contains(usrName) || (!nombreComp.isEmpty() && pilotoLower.contains(nombreComp));
+    }
+
 
     private void exportarMisResultados() {
         if (misResultados.isEmpty()) {

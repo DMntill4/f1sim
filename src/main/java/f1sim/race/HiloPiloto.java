@@ -200,17 +200,14 @@ public class HiloPiloto implements Runnable {
     }
 
     private double calcularTiempoBaseVuelta() {
-        ModoConduccion modoConduccion = vehiculo.obtenerModo(modo);
-        double velocidad = modoConduccion.velocidadPromedioKmh > 0 ? modoConduccion.velocidadPromedioKmh : 250;
-        double tiempoBaseSegundos = (circuito.longitudKm / velocidad) * 3600.0;
+        ModoConduccion modoObj = vehiculo.obtenerModo(modo);
+        double vel = modoObj.velocidadPromedioKmh > 0 ? modoObj.velocidadPromedioKmh : 250.0;
+        double tiempoBase = (circuito.longitudKm / vel) * 3600.0;
 
-        double factorClima = 1.0;
-        if ("lluvioso".equalsIgnoreCase(clima)) factorClima = 1.08;
-        else if ("extremo".equalsIgnoreCase(clima)) factorClima = 1.18;
+        double factorClima = "lluvioso".equalsIgnoreCase(clima) ? 1.08 : ("extremo".equalsIgnoreCase(clima) ? 1.18 : 1.0);
+        double factorExp = 1.0 - (Math.min(piloto.experiencia, 15) * 0.002);
 
-        int experiencia = Math.min(piloto.experiencia, 15);
-        double factorExperiencia = 1.0 - (experiencia * 0.002);
-
-        return tiempoBaseSegundos * factorClima * factorExperiencia;
+        return tiempoBase * factorClima * factorExp;
     }
+
 }
