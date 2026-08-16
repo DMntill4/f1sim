@@ -21,8 +21,33 @@ public class Vehiculo {
     public ModoConduccion agresiva = new ModoConduccion();
     public ModoConduccion ahorro = new ModoConduccion();
 
+    public TipoNeumatico tipoNeumatico = TipoNeumatico.MEDIUM;
+    public double porcentajeDesgasteNeumatico = 0.0; // 0.0% a 100.0%
+    public double temperaturaNeumaticosC = 90.0;    // Grados Celsius (óptimo 90-105°C)
+
     public Vehiculo() {
     }
+
+    public double calcularRendimientoTermico(String modoConduccion, String clima) {
+        // Ajuste de temperatura según agresividad
+        if ("agresiva".equalsIgnoreCase(modoConduccion)) {
+            temperaturaNeumaticosC = Math.min(130.0, temperaturaNeumaticosC + 2.5);
+        } else if ("ahorro".equalsIgnoreCase(modoConduccion)) {
+            temperaturaNeumaticosC = Math.max(70.0, temperaturaNeumaticosC - 1.5);
+        }
+
+        // Penalización si los neumáticos están sobrecalentados (> 110°C) o muy fríos (< 80°C)
+        double factorTemperatura = 1.0;
+        if (temperaturaNeumaticosC > 110.0) {
+            factorTemperatura = 0.90; // Degrada agarre por sobrecalentamiento
+        } else if (temperaturaNeumaticosC < 80.0) {
+            factorTemperatura = 0.92; // Falta de temperatura
+        }
+
+        double agarreBase = tipoNeumatico.calcularAgarreEfectivo(porcentajeDesgasteNeumatico, clima);
+        return agarreBase * factorTemperatura;
+    }
+
 
     @Override
     public String toString() {
