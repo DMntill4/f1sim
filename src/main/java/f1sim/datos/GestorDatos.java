@@ -41,10 +41,23 @@ public class GestorDatos {
 
     private static <T> void guardarLista(String nombreArchivo, List<T> lista) {
         asegurarCarpeta();
+        respaldarArchivo(nombreArchivo);
         try (FileWriter escritor = new FileWriter(CARPETA + "/" + nombreArchivo)) {
             gson.toJson(lista, escritor);
         } catch (IOException e) {
             System.out.println("Error al guardar " + nombreArchivo + ": " + e.getMessage());
+        }
+    }
+
+    private static void respaldarArchivo(String nombreArchivo) {
+        java.io.File origen = new java.io.File(CARPETA + "/" + nombreArchivo);
+        if (origen.exists()) {
+            try {
+                Files.copy(origen.toPath(), Paths.get(CARPETA + "/" + nombreArchivo + ".bak"),
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException ignored) {
+                // Silencioso si falla el respaldo
+            }
         }
     }
 
@@ -62,6 +75,7 @@ public class GestorDatos {
             return new ArrayList<>();
         }
     }
+
 
     // ---------- PILOTOS ----------
     public static void guardarPilotos(List<Piloto> pilotos) {
