@@ -56,7 +56,6 @@ public class GestorDatos {
                 Files.copy(origen.toPath(), Paths.get(CARPETA + "/" + nombreArchivo + ".bak"),
                         java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException ignored) {
-                // Silencioso si falla el respaldo
             }
         }
     }
@@ -64,17 +63,15 @@ public class GestorDatos {
     private static <T> List<T> cargarLista(String nombreArchivo, Type tipo) {
         asegurarCarpeta();
         java.io.File archivo = new java.io.File(CARPETA + "/" + nombreArchivo);
-        if (!archivo.exists()) {
-            return new ArrayList<>();
-        }
+        if (!archivo.exists()) return new ArrayList<>();
         try (FileReader lector = new FileReader(archivo)) {
             List<T> lista = gson.fromJson(lector, tipo);
             return lista != null ? lista : new ArrayList<>();
         } catch (IOException e) {
-            System.out.println("Error al leer " + nombreArchivo + ": " + e.getMessage());
             return new ArrayList<>();
         }
     }
+
 
 
     // ---------- PILOTOS ----------

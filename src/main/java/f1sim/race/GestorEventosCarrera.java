@@ -35,17 +35,12 @@ public class GestorEventosCarrera {
     }
 
     public double obtenerFactorVelocidad(EstadoCarrera estado) {
-        switch (estado) {
-            case SAFETY_CAR:
-                return 0.50; // 50% de la velocidad normal
-            case VSC:
-                return 0.70; // 70% de la velocidad normal
-            case RED_FLAG:
-                return 0.00;
-            default:
-                return 1.00;
-        }
+        if (estado == EstadoCarrera.SAFETY_CAR) return 0.50;
+        if (estado == EstadoCarrera.VSC) return 0.70;
+        if (estado == EstadoCarrera.RED_FLAG) return 0.00;
+        return 1.00;
     }
+
 
     public EstadoCarrera getEstadoActual() {
         return estadoActual;
