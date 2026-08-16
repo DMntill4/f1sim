@@ -31,11 +31,16 @@ public class Vehiculo {
 
     public ModoConduccion obtenerModo(String nombreModo) {
         if ("agresiva".equalsIgnoreCase(nombreModo)) {
-            return agresiva;
+            return agresiva != null ? agresiva : new ModoConduccion();
         } else if ("ahorro".equalsIgnoreCase(nombreModo)) {
-            return ahorro;
+            return ahorro != null ? ahorro : new ModoConduccion();
         } else {
-            return normal;
+            return normal != null ? normal : new ModoConduccion();
         }
     }
+
+    public boolean esValido() {
+        return equipo != null && !equipo.isEmpty() && modelo != null && !modelo.isEmpty() && velocidadMaximaKmh > 0;
+    }
 }
+

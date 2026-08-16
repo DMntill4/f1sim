@@ -21,14 +21,18 @@ public class Piloto {
 
     public Piloto(int id, String nombre, String equipo, String rol, int experiencia, int nivelHabilidad, int victorias, int podios, int puntos) {
         this.id = id;
-        this.nombre = nombre;
-        this.equipo = equipo;
-        this.rol = rol;
-        this.experiencia = experiencia;
-        this.nivelHabilidad = nivelHabilidad;
-        this.victorias = victorias;
-        this.podios = podios;
-        this.puntos = puntos;
+        this.nombre = nombre != null ? nombre.trim() : "Piloto Desconocido";
+        this.equipo = equipo != null ? equipo.trim() : "Sin Equipo";
+        this.rol = (rol != null && (rol.equalsIgnoreCase("Lider") || rol.equalsIgnoreCase("Escudero"))) ? rol : "Lider";
+        this.experiencia = Math.max(0, experiencia);
+        this.nivelHabilidad = Math.max(1, Math.min(100, nivelHabilidad));
+        this.victorias = Math.max(0, victorias);
+        this.podios = Math.max(0, podios);
+        this.puntos = Math.max(0, puntos);
+    }
+
+    public boolean esValido() {
+        return id > 0 && nombre != null && !nombre.isEmpty() && nivelHabilidad >= 1 && nivelHabilidad <= 100;
     }
 
     @Override
@@ -36,3 +40,4 @@ public class Piloto {
         return nombre + " (" + equipo + ")";
     }
 }
+
