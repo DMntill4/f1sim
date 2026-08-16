@@ -1,104 +1,96 @@
-# Simulación de Fórmula 1 (Java Swing + Gson)
+# Sistema de Simulación y Telemetría de Fórmula 1
 
-Proyecto de escritorio en Java que administra pilotos, equipos, vehículos y circuitos
-de F1, con una simulación de clasificación. Los datos se guardan en archivos JSON
-usando la librería **Gson**, y la interfaz gráfica está hecha con **Swing**.
+![Java](https://img.shields.io/badge/Java_17+-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Java Swing](https://img.shields.io/badge/Java_Swing-007396?style=for-the-badge&logo=java&logoColor=white)
+![Google Gson](https://img.shields.io/badge/Google_Gson-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![JSON](https://img.shields.io/badge/JSON-000000?style=for-the-badge&logo=json&logoColor=white)
+![Apache Maven](https://img.shields.io/badge/Apache_Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
 
-## Requisitos
+Sistema de escritorio desarrollado en Java para la gestión integral, simulación física multihilo y análisis de telemetría de la Fórmula 1. La aplicación implementa una arquitectura en capas con persistencia en archivos JSON y control de acceso basado en roles.
 
-- **JDK 17 o superior** instalado (`java -version` para comprobarlo).
-- **Maven** (recomendado, para descargar Gson automáticamente) — o, si prefieres
-  no usar Maven, puedes descargar manualmente el jar de Gson (ver más abajo).
+---
 
-## Estructura del proyecto
+## Desarrolladores
+
+- Diego Mantilla
+- Andres Guerra
+
+---
+
+## Funcionalidades Principales
+
+- Control de Acceso Basado en Roles (RBAC): Separación estricta de permisos entre Administrador (CRUD completo de entidades) y Usuario (Simulación de sesiones y consulta).
+- Gestión Completa de Entidades (CRUD): Registro, edición, búsqueda y eliminación de Pilotos, Equipos, Vehículos y Circuitos.
+- Asignación Piloto-Vehículo: Selector por escudería para definir qué vehículo conduce cada piloto.
+- Simulación de Clasificación: Cálculo numérico de tiempos de vuelta considerando carga aerodinámica, presión de neumáticos, degradación, estrategia de combustible y clima.
+- Carrera en Vivo en Tiempo Real: Renderizado 2D de la pista con animación independiente por hilo de piloto, paradas en boxes (Pit Stops), zonas DRS y banderas de carrera (Safety Car, VSC).
+- Perfil de Usuario Personal: Visualización de estadísticas individuales, mejores tiempos personales, historial filtrado y exportación de datos a formato CSV.
+- Telemetría en Vivo: Gráficos interactivos para monitoreo continuo de deltas de tiempo por vuelta.
+
+---
+
+## Estructura del Proyecto
 
 ```
 f1sim/
-├── pom.xml                        <- configuración de Maven (dependencia de Gson)
-├── data/                          <- archivos JSON con los datos (persistencia)
+├── data/                            Archivos JSON de persistencia de datos
 │   ├── pilotos.json
 │   ├── equipos.json
 │   ├── circuitos.json
-│   └── vehiculos.json
-└── src/main/java/f1sim/
-    ├── Main.java                  <- punto de entrada del programa
-    ├── model/                     <- clases de datos (Piloto, Equipo, Vehiculo, Circuito, etc.)
-    ├── datos/GestorDatos.java     <- lectura/escritura de JSON con Gson
-    └── ui/                        <- pantallas Swing (una por pestaña)
+│   ├── vehiculos.json
+│   ├── usuarios.json
+│   └── resultados.json
+├── lib/                             Librerías auxiliares (Gson)
+├── pom.xml                          Configuración de dependencias de Maven
+└── src/
+    ├── main/java/f1sim/
+    │   ├── Main.java                Punto de entrada de la aplicación
+    │   ├── datos/                   Persistencia de datos y exportador CSV/JSON
+    │   ├── model/                   Modelos de dominio POO (Piloto, Vehiculo, Circuito, etc.)
+    │   ├── race/                    Motor de simulación multihilo (HiloPiloto, GestorPitStop, etc.)
+    │   └── ui/                      Paneles e interfaz gráfica Swing
+    └── test/java/f1sim/             Pruebas unitarias del sistema
+```
 
-## Estrategia de Ramas Git (Git Flow & Feature Branches)
+---
 
-El desarrollo del proyecto `f1sim` se organiza según la siguiente estructura de ramas:
-- `main`: Rama de producción con código completamente probado y estable.
-- `develop`: Rama de integración para el trabajo continuo de desarrollo.
-- `feature/*`: Ramas específicas por cada módulo funcional (ej. `feature/core-data-improvements`, `feature/telemetry-weather`, `feature/pitstop-strategy`, `feature/live-telemetry-ui`).
+## Instrucciones de Compilación y Ejecución
 
+### Opción 1: Ejecución mediante Maven
 
-## Cómo ejecutarlo
-
-### Opción A: con Maven (más fácil)
-
-Abre una terminal dentro de la carpeta `f1sim` y ejecuta:
+Para compilar y ejecutar directamente con Maven:
 
 ```bash
 mvn compile exec:java
 ```
 
-Esto descarga Gson automáticamente y abre la ventana de la aplicación.
-
-También puedes generar un `.jar` ejecutable con todo incluido:
+Para generar un empaquetado ejecutable JAR:
 
 ```bash
 mvn package
 java -jar target/f1sim.jar
 ```
 
-### Opción B: con un IDE (IntelliJ IDEA, Eclipse, VS Code)
+### Opción 2: Compilación Manual mediante Java CLI
 
-1. Abre la carpeta `f1sim` como un **proyecto Maven** (la mayoría de los IDE lo
-   detectan automáticamente al ver el `pom.xml`).
-2. Deja que el IDE descargue la dependencia de Gson.
-3. Ejecuta la clase `f1sim.Main`.
+Compilación directa del código fuente:
 
-### Opción C: sin Maven (compilación manual)
+```bash
+javac --release 17 -cp "lib/*" -d target/classes src/main/java/f1sim/*.java src/main/java/f1sim/datos/*.java src/main/java/f1sim/model/*.java src/main/java/f1sim/race/*.java src/main/java/f1sim/ui/*.java
+```
 
-1. Descarga el jar de Gson (por ejemplo `gson-2.11.0.jar`) desde Maven Central y
-   colócalo en una carpeta `lib/` dentro del proyecto.
-2. Compila:
-   ```bash
-   javac -cp lib/gson-2.11.0.jar -d out $(find src/main/java -name "*.java")
-   ```
-3. Ejecuta:
-   ```bash
-   java -cp "out:lib/gson-2.11.0.jar" f1sim.Main
-   ```
-   (en Windows usa `;` en vez de `:` para separar las rutas del classpath)
+Ejecución de la aplicación:
 
-## Qué hace cada pestaña
+```bash
+java -cp "target/classes;lib/*" f1sim.Main
+```
 
-- **Pilotos**: agregar, editar, eliminar y buscar pilotos.
-- **Equipos**: agregar, editar, eliminar y buscar equipos, y asignarles pilotos.
-- **Vehículos**: agregar, editar, eliminar y buscar autos. Al seleccionar un auto
-  en la tabla, se muestra **su imagen y sus especificaciones** (velocidad,
-  aceleración, consumo de combustible y desgaste de neumáticos por modo de
-  conducción y clima) — esta es la interfaz visual de los autos de F1.
-- **Circuitos**: agregar, editar, eliminar y buscar circuitos, con su historial
-  de ganadores y récord de vuelta.
-- **Simulación de Clasificación**: elige un circuito, un modo de conducción
-  (normal / agresiva / ahorro) y un clima (o "aleatorio"), y genera la tabla de
-  posiciones calculando el tiempo de vuelta de cada piloto según el vehículo de
-  su equipo. Los resultados se pueden guardar para consultarlos después.
+---
 
-## Persistencia de datos
+## Credenciales de Acceso Predeterminadas
 
-Todos los datos (pilotos, equipos, circuitos y vehículos) se guardan
-automáticamente en la carpeta `data/` en formato JSON cuando cierras la
-ventana. Los resultados de las simulaciones se guardan en
-`data/resultados.json` al presionar "Guardar resultados".
-
-## Nota sobre las imágenes de los autos
-
-Las imágenes se cargan desde URLs (por ejemplo de Wikimedia Commons) cuando
-seleccionas un vehículo. Se necesita conexión a internet para verlas; si una
-URL falla o no hay conexión, se muestra un mensaje de "imagen no disponible"
-en vez de bloquear el programa.
+- Administrador: usuario `admin`, contraseña `admin123`
+- Piloto Usuario (Max Verstappen): usuario `verstappen`, contraseña `123`
+- Piloto Usuario (Charles Leclerc): usuario `leclerc`, contraseña `123`
+- Usuario Estándar: usuario `usuario`, contraseña `user123`
