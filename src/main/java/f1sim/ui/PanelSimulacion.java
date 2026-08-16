@@ -49,22 +49,22 @@ public class PanelSimulacion extends JPanel {
 
         // ---- Panel de configuracion ----
         JPanel panelConfiguracion = F1Theme.createCardPanel();
-        panelConfiguracion.setLayout(new GridLayout(2, 1, 0, 8));
-        panelConfiguracion.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
+        panelConfiguracion.setLayout(new GridLayout(3, 1, 0, 6));
+        panelConfiguracion.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
 
-        // Fila 1: Controles de selección de parámetros
-        JPanel panelControles = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 2));
-        panelControles.setOpaque(false);
+        // Fila 1: Selección Principal (Circuito, Vehículo, Modo, Clima)
+        JPanel fila1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 2));
+        fila1.setOpaque(false);
 
         JLabel lblCircuito = new JLabel("Circuito:");
         lblCircuito.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        panelControles.add(lblCircuito);
+        fila1.add(lblCircuito);
 
         comboCircuito = new JComboBox<>(circuitos.values().toArray(new Circuito[0]));
-        comboCircuito.setPreferredSize(new Dimension(130, 28));
-        panelControles.add(comboCircuito);
+        comboCircuito.setPreferredSize(new Dimension(140, 28));
+        fila1.add(comboCircuito);
 
-        panelControles.add(new JLabel("Vehiculo:"));
+        fila1.add(new JLabel("Vehiculo:"));
         List<String> opcionesVehiculo = new ArrayList<>();
         opcionesVehiculo.add("Auto del Equipo");
         for (Vehiculo v : vehiculos.values()) {
@@ -72,56 +72,78 @@ public class PanelSimulacion extends JPanel {
             opcionesVehiculo.add(clave);
         }
         comboVehiculo = new JComboBox<>(opcionesVehiculo.toArray(new String[0]));
-        comboVehiculo.setPreferredSize(new Dimension(130, 28));
-        panelControles.add(comboVehiculo);
+        comboVehiculo.setPreferredSize(new Dimension(140, 28));
+        fila1.add(comboVehiculo);
 
-        panelControles.add(new JLabel("Modo:"));
+        fila1.add(new JLabel("Modo:"));
         comboModo = new JComboBox<>(new String[]{"normal", "agresiva", "ahorro"});
-        comboModo.setPreferredSize(new Dimension(85, 28));
-        panelControles.add(comboModo);
+        comboModo.setPreferredSize(new Dimension(90, 28));
+        fila1.add(comboModo);
 
-        panelControles.add(new JLabel("Clima:"));
+        fila1.add(new JLabel("Clima:"));
         comboClima = new JComboBox<>(new String[]{"aleatorio", "seco", "lluvioso", "extremo"});
-        comboClima.setPreferredSize(new Dimension(85, 28));
-        panelControles.add(comboClima);
+        comboClima.setPreferredSize(new Dimension(95, 28));
+        fila1.add(comboClima);
 
-        panelControles.add(new JLabel("Carga Aero:"));
+        // Fila 2: Ajustes Técnicos del Vehículo e Impacto de Abrasividad
+        JPanel fila2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 2));
+        fila2.setOpaque(false);
+
+        fila2.add(new JLabel("Carga Aero:"));
         comboAero = new JComboBox<>(new String[]{"baja", "media", "alta"});
         comboAero.setSelectedItem("media");
-        comboAero.setPreferredSize(new Dimension(70, 28));
-        panelControles.add(comboAero);
+        comboAero.setPreferredSize(new Dimension(75, 28));
+        fila2.add(comboAero);
 
-        panelControles.add(new JLabel("Presion Neum.:"));
+        fila2.add(new JLabel("Presion Neum.:"));
         comboPresion = new JComboBox<>(new String[]{"baja", "estandar", "alta"});
         comboPresion.setSelectedItem("estandar");
-        comboPresion.setPreferredSize(new Dimension(80, 28));
-        panelControles.add(comboPresion);
+        comboPresion.setPreferredSize(new Dimension(85, 28));
+        fila2.add(comboPresion);
 
-        panelControles.add(new JLabel("Estrategia Comb.:"));
+        fila2.add(new JLabel("Estrategia Comb.:"));
         comboEstrategia = new JComboBox<>(new String[]{"agresiva", "balanceada", "ahorro"});
         comboEstrategia.setSelectedItem("balanceada");
-        comboEstrategia.setPreferredSize(new Dimension(90, 28));
-        panelControles.add(comboEstrategia);
+        comboEstrategia.setPreferredSize(new Dimension(95, 28));
+        fila2.add(comboEstrategia);
 
+        JLabel lblImpactoCircuito = new JLabel(" Impacto Abrasividad: Normal");
+        lblImpactoCircuito.setFont(new Font("Segoe UI", Font.ITALIC, 11));
+        lblImpactoCircuito.setForeground(F1Theme.TEXT_MUTED);
+        fila2.add(lblImpactoCircuito);
 
-        // Fila 2: Botones de Acción
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 2));
-        panelBotones.setOpaque(false);
+        Runnable actualizarImpactoAbrasivo = () -> {
+            Circuito c = (Circuito) comboCircuito.getSelectedItem();
+            if (c != null) {
+                double ab = c.factorAbrasividad > 0 ? c.factorAbrasividad : 1.0;
+                int porc = (int) Math.round((ab - 1.0) * 100);
+                String signo = porc >= 0 ? "+" : "";
+                lblImpactoCircuito.setText(" Desgaste y Consumo por Pista: " + signo + porc + "% (" + c.nombre + ")");
+            }
+        };
+        comboCircuito.addActionListener(e -> actualizarImpactoAbrasivo.run());
+        actualizarImpactoAbrasivo.run();
+
+        // Fila 3: Botones de Acción
+        JPanel fila3 = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 2));
+        fila3.setOpaque(false);
 
         JButton botonSimular = F1Theme.createF1Button("Simular Clasificacion", true);
-        panelBotones.add(botonSimular);
+        fila3.add(botonSimular);
 
         JButton botonGuardar = F1Theme.createF1Button("Guardar Resultados", false);
-        panelBotones.add(botonGuardar);
+        fila3.add(botonGuardar);
 
         JButton botonHistorial = F1Theme.createF1Button("Historial de Tiempos", false);
         botonHistorial.addActionListener(e -> abrirHistorial());
-        panelBotones.add(botonHistorial);
+        fila3.add(botonHistorial);
 
-        panelConfiguracion.add(panelControles);
-        panelConfiguracion.add(panelBotones);
+        panelConfiguracion.add(fila1);
+        panelConfiguracion.add(fila2);
+        panelConfiguracion.add(fila3);
 
         add(panelConfiguracion, BorderLayout.NORTH);
+
 
 
         // ---- Tabla de resultados ----

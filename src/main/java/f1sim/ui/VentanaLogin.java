@@ -93,10 +93,11 @@ public class VentanaLogin extends JFrame {
 
         // Mensaje de estado
         gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
-        etiquetaMensaje = new JLabel("Credenciales iniciales: admin / admin123 o usuario / user123", SwingConstants.CENTER);
+        etiquetaMensaje = new JLabel("Usuarios: admin/admin123 | verstappen/123 | leclerc/123", SwingConstants.CENTER);
         etiquetaMensaje.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         etiquetaMensaje.setForeground(F1Theme.TEXT_MUTED);
         container.add(etiquetaMensaje, gbc);
+
 
         // Boton Iniciar Sesion
         gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2; gbc.insets = new Insets(14, 12, 6, 12);

@@ -183,10 +183,13 @@ public class GestorDatos {
         if (lista.isEmpty()) {
             lista.add(new Usuario(1, "admin", "admin123", Usuario.Rol.ADMIN, "Administrador F1"));
             lista.add(new Usuario(2, "usuario", "user123", Usuario.Rol.USUARIO, "Usuario Estandar"));
+            lista.add(new Usuario(3, "verstappen", "123", Usuario.Rol.USUARIO, "Max Verstappen"));
+            lista.add(new Usuario(4, "leclerc", "123", Usuario.Rol.USUARIO, "Charles Leclerc"));
             guardarUsuarios(lista);
         }
         return lista;
     }
+
 
     // ---------- DATOS INICIALES DE LA ESPECIFICACION ----------
     public static void cargarDatosIniciales() {
