@@ -56,6 +56,7 @@ public class VentanaPrincipal extends JFrame {
         PanelCircuitos panelCircuitos = new PanelCircuitos(circuitos, pilotos, esAdmin);
         PanelSimulacion panelSimulacion = new PanelSimulacion(pilotos, vehiculos, circuitos);
         PanelCarrera panelCarrera = new PanelCarrera(pilotos, vehiculos, circuitos);
+        PanelPerfilUsuario panelPerfil = new PanelPerfilUsuario(usuarioActivo, pilotos);
 
         pestanas.addTab("Pilotos", panelPilotos);
         pestanas.addTab("Equipos", panelEquipos);
@@ -63,8 +64,10 @@ public class VentanaPrincipal extends JFrame {
         pestanas.addTab("Circuitos", panelCircuitos);
         pestanas.addTab("Clasificacion", panelSimulacion);
         pestanas.addTab("CARRERA EN VIVO", panelCarrera);
+        pestanas.addTab("Mi Perfil", panelPerfil);
 
         pestanas.setSelectedIndex(5);
+
 
         add(pestanas, BorderLayout.CENTER);
 
