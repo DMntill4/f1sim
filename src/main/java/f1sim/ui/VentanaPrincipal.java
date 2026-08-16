@@ -57,12 +57,12 @@ public class VentanaPrincipal extends JFrame {
         PanelSimulacion panelSimulacion = new PanelSimulacion(pilotos, vehiculos, circuitos);
         PanelCarrera panelCarrera = new PanelCarrera(pilotos, vehiculos, circuitos);
 
-        pestanas.addTab("Pilotos", F1ImageIcons.getHelmetIcon(18, 18), panelPilotos);
-        pestanas.addTab("Equipos", F1ImageIcons.getHelmetIcon(18, 18), panelEquipos);
-        pestanas.addTab("Vehiculos", F1ImageIcons.getCarIcon(20, 16), panelVehiculos);
-        pestanas.addTab("Circuitos", F1Iconos.getCircuitIcon(18, 18, F1Theme.COLOR_GREEN), panelCircuitos);
-        pestanas.addTab("Clasificacion", F1ImageIcons.getTrophyIcon(18, 18), panelSimulacion);
-        pestanas.addTab("CARRERA EN VIVO", F1ImageIcons.getFlagIcon(18, 18), panelCarrera);
+        pestanas.addTab("Pilotos", panelPilotos);
+        pestanas.addTab("Equipos", panelEquipos);
+        pestanas.addTab("Vehiculos", panelVehiculos);
+        pestanas.addTab("Circuitos", panelCircuitos);
+        pestanas.addTab("Clasificacion", panelSimulacion);
+        pestanas.addTab("CARRERA EN VIVO", panelCarrera);
 
         pestanas.setSelectedIndex(5);
 
@@ -96,7 +96,7 @@ public class VentanaPrincipal extends JFrame {
         JLabel titulo = new JLabel("FORMULA 1   SIMULATOR");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 20));
         titulo.setForeground(F1Theme.TEXT_WHITE);
-        titulo.setIcon(F1ImageIcons.getF1Logo(32, 18));
+
 
         JLabel subtitulo = new JLabel("Centro de Telemetria y Estrategia de Carrera");
         subtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 12));

@@ -48,55 +48,68 @@ public class PanelSimulacion extends JPanel {
 
         // ---- Panel de configuracion ----
         JPanel panelConfiguracion = F1Theme.createCardPanel();
-        panelConfiguracion.setLayout(new FlowLayout(FlowLayout.LEFT, 8, 5));
+        panelConfiguracion.setLayout(new GridLayout(2, 1, 0, 8));
+        panelConfiguracion.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
+
+        // Fila 1: Controles de selección de parámetros
+        JPanel panelControles = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 2));
+        panelControles.setOpaque(false);
 
         JLabel lblCircuito = new JLabel("Circuito:");
         lblCircuito.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        panelConfiguracion.add(lblCircuito);
+        panelControles.add(lblCircuito);
 
         comboCircuito = new JComboBox<>(circuitos.values().toArray(new Circuito[0]));
         comboCircuito.setPreferredSize(new Dimension(150, 28));
-        panelConfiguracion.add(comboCircuito);
+        panelControles.add(comboCircuito);
 
-        panelConfiguracion.add(new JLabel("Modo:"));
+        panelControles.add(new JLabel("Modo:"));
         comboModo = new JComboBox<>(new String[]{"normal", "agresiva", "ahorro"});
         comboModo.setPreferredSize(new Dimension(85, 28));
-        panelConfiguracion.add(comboModo);
+        panelControles.add(comboModo);
 
-        panelConfiguracion.add(new JLabel("Clima:"));
+        panelControles.add(new JLabel("Clima:"));
         comboClima = new JComboBox<>(new String[]{"aleatorio", "seco", "lluvioso", "extremo"});
         comboClima.setPreferredSize(new Dimension(85, 28));
-        panelConfiguracion.add(comboClima);
+        panelControles.add(comboClima);
 
-        panelConfiguracion.add(new JLabel("Carga Aero:"));
+        panelControles.add(new JLabel("Carga Aero:"));
         comboAero = new JComboBox<>(new String[]{"baja", "media", "alta"});
         comboAero.setSelectedItem("media");
         comboAero.setPreferredSize(new Dimension(70, 28));
-        panelConfiguracion.add(comboAero);
+        panelControles.add(comboAero);
 
-        panelConfiguracion.add(new JLabel("Presion Neum.:"));
+        panelControles.add(new JLabel("Presion Neum.:"));
         comboPresion = new JComboBox<>(new String[]{"baja", "estandar", "alta"});
         comboPresion.setSelectedItem("estandar");
         comboPresion.setPreferredSize(new Dimension(80, 28));
-        panelConfiguracion.add(comboPresion);
+        panelControles.add(comboPresion);
 
-        panelConfiguracion.add(new JLabel("Estrategia Comb.:"));
+        panelControles.add(new JLabel("Estrategia Comb.:"));
         comboEstrategia = new JComboBox<>(new String[]{"agresiva", "balanceada", "ahorro"});
         comboEstrategia.setSelectedItem("balanceada");
         comboEstrategia.setPreferredSize(new Dimension(90, 28));
-        panelConfiguracion.add(comboEstrategia);
+        panelControles.add(comboEstrategia);
+
+        // Fila 2: Botones de Acción
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 2));
+        panelBotones.setOpaque(false);
 
         JButton botonSimular = F1Theme.createF1Button("Simular Clasificacion", true);
-        panelConfiguracion.add(botonSimular);
+        panelBotones.add(botonSimular);
 
         JButton botonGuardar = F1Theme.createF1Button("Guardar Resultados", false);
-        panelConfiguracion.add(botonGuardar);
+        panelBotones.add(botonGuardar);
 
         JButton botonHistorial = F1Theme.createF1Button("Historial de Tiempos", false);
         botonHistorial.addActionListener(e -> abrirHistorial());
-        panelConfiguracion.add(botonHistorial);
+        panelBotones.add(botonHistorial);
+
+        panelConfiguracion.add(panelControles);
+        panelConfiguracion.add(panelBotones);
 
         add(panelConfiguracion, BorderLayout.NORTH);
+
 
         // ---- Tabla de resultados ----
         String[] columnas = {"Posicion", "Piloto", "Equipo", "Vehiculo", "Clima", "Tiempo de Vuelta"};
