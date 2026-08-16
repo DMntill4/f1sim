@@ -150,16 +150,10 @@ public class DialogoCompararVehiculos extends JDialog {
     }
 
     private void agregarFilaComp(String param, double val1, double val2, boolean mayorEsMejor, String unidad) {
-        String ventaja;
-        if (Math.abs(val1 - val2) < 0.001) {
-            ventaja = "Igualdad";
-        } else if ((mayorEsMejor && val1 > val2) || (!mayorEsMejor && val1 < val2)) {
-            ventaja = "Gana Vehículo 1";
-        } else {
-            ventaja = "Gana Vehículo 2";
-        }
-        modeloTabla.addRow(new Object[]{
-                param, String.format("%.2f%s", val1, unidad), String.format("%.2f%s", val2, unidad), ventaja
-        });
+        boolean igual = Math.abs(val1 - val2) < 0.001;
+        boolean ganaV1 = (mayorEsMejor && val1 > val2) || (!mayorEsMejor && val1 < val2);
+        String ventaja = igual ? "Igualdad" : (ganaV1 ? "Gana Vehículo 1" : "Gana Vehículo 2");
+        modeloTabla.addRow(new Object[]{param, String.format("%.2f%s", val1, unidad), String.format("%.2f%s", val2, unidad), ventaja});
     }
+
 }
