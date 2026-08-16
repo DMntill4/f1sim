@@ -228,44 +228,45 @@ public class GestorDatos {
     }
 
     private static List<Piloto> crearPilotosIniciales() {
-        List<Piloto> pilotos = new ArrayList<>();
-        pilotos.add(new Piloto(1, "Max Verstappen", "Red Bull Racing", "Lider", 9, 97, 54, 98, 2586));
-        pilotos.add(new Piloto(2, "Sergio Perez", "Red Bull Racing", "Escudero", 13, 82, 6, 35, 1357));
-        pilotos.add(new Piloto(3, "Lewis Hamilton", "Mercedes-AMG Petronas", "Lider", 17, 96, 103, 197, 4639));
-        pilotos.add(new Piloto(4, "George Russell", "Mercedes-AMG Petronas", "Escudero", 5, 88, 2, 12, 508));
-        pilotos.add(new Piloto(5, "Charles Leclerc", "Ferrari", "Lider", 6, 91, 5, 28, 935));
-        pilotos.add(new Piloto(6, "Carlos Sainz", "Ferrari", "Escudero", 9, 87, 3, 18, 860));
-        pilotos.add(new Piloto(7, "Lando Norris", "McLaren", "Lider", 5, 89, 1, 14, 590));
-        pilotos.add(new Piloto(8, "Oscar Piastri", "McLaren", "Escudero", 2, 85, 0, 4, 195));
-        pilotos.add(new Piloto(9, "Fernando Alonso", "Aston Martin", "Lider", 22, 90, 32, 106, 2198));
-        pilotos.add(new Piloto(10, "Lance Stroll", "Aston Martin", "Escudero", 7, 72, 0, 3, 238));
-        pilotos.add(new Piloto(11, "Esteban Ocon", "Alpine", "Lider", 7, 78, 1, 3, 395));
-        pilotos.add(new Piloto(12, "Pierre Gasly", "Alpine", "Escudero", 7, 80, 1, 4, 348));
-        pilotos.add(new Piloto(13, "Valtteri Bottas", "Alfa Romeo", "Lider", 12, 79, 10, 67, 1792));
-        pilotos.add(new Piloto(14, "Zhou Guanyu", "Alfa Romeo", "Escudero", 2, 68, 0, 0, 12));
-        pilotos.add(new Piloto(15, "Kevin Magnussen", "Haas", "Lider", 10, 74, 0, 1, 185));
-        pilotos.add(new Piloto(16, "Nico Hulkenberg", "Haas", "Escudero", 11, 76, 0, 0, 530));
-        pilotos.add(new Piloto(17, "Yuki Tsunoda", "AlphaTauri", "Lider", 3, 77, 0, 1, 46));
-        pilotos.add(new Piloto(18, "Daniel Ricciardo", "AlphaTauri", "Escudero", 13, 81, 8, 32, 1311));
-        pilotos.add(new Piloto(19, "Alexander Albon", "Williams", "Lider", 5, 79, 0, 2, 220));
-        pilotos.add(new Piloto(20, "Logan Sargeant", "Williams", "Escudero", 1, 62, 0, 0, 1));
-        return pilotos;
+        return Arrays.asList(
+                new Piloto(1, "Max Verstappen", "Red Bull Racing", "Lider", 9, 97, 54, 98, 2586),
+                new Piloto(2, "Sergio Perez", "Red Bull Racing", "Escudero", 13, 82, 6, 35, 1357),
+                new Piloto(3, "Lewis Hamilton", "Mercedes-AMG Petronas", "Lider", 17, 96, 103, 197, 4639),
+                new Piloto(4, "George Russell", "Mercedes-AMG Petronas", "Escudero", 5, 88, 2, 12, 508),
+                new Piloto(5, "Charles Leclerc", "Ferrari", "Lider", 6, 91, 5, 28, 935),
+                new Piloto(6, "Carlos Sainz", "Ferrari", "Escudero", 9, 87, 3, 18, 860),
+                new Piloto(7, "Lando Norris", "McLaren", "Lider", 5, 89, 1, 14, 590),
+                new Piloto(8, "Oscar Piastri", "McLaren", "Escudero", 2, 85, 0, 4, 195),
+                new Piloto(9, "Fernando Alonso", "Aston Martin", "Lider", 22, 90, 32, 106, 2198),
+                new Piloto(10, "Lance Stroll", "Aston Martin", "Escudero", 7, 72, 0, 3, 238),
+                new Piloto(11, "Esteban Ocon", "Alpine", "Lider", 7, 78, 1, 3, 395),
+                new Piloto(12, "Pierre Gasly", "Alpine", "Escudero", 7, 80, 1, 4, 394),
+                new Piloto(13, "Valtteri Bottas", "Alfa Romeo", "Lider", 11, 83, 10, 67, 1797),
+                new Piloto(14, "Zhou Guanyu", "Alfa Romeo", "Escudero", 2, 75, 0, 0, 12),
+                new Piloto(15, "Kevin Magnussen", "Haas", "Lider", 9, 77, 0, 1, 186),
+                new Piloto(16, "Nico Hulkenberg", "Haas", "Escudero", 11, 79, 0, 0, 530),
+                new Piloto(17, "Yuki Tsunoda", "AlphaTauri", "Lider", 3, 76, 0, 0, 61),
+                new Piloto(18, "Daniel Ricciardo", "AlphaTauri", "Escudero", 13, 84, 8, 32, 1317),
+                new Piloto(19, "Alex Albon", "Williams", "Lider", 5, 81, 0, 2, 228),
+                new Piloto(20, "Logan Sargeant", "Williams", "Escudero", 1, 68, 0, 0, 1)
+        );
     }
 
     private static List<Equipo> crearEquiposIniciales() {
-        List<Equipo> equipos = new ArrayList<>();
-        equipos.add(new Equipo("Red Bull Racing", "Austria", "Honda", Arrays.asList(1, 2), ""));
-        equipos.add(new Equipo("Mercedes-AMG Petronas", "Alemania", "Mercedes", Arrays.asList(3, 4), ""));
-        equipos.add(new Equipo("Ferrari", "Italia", "Ferrari", Arrays.asList(5, 6), ""));
-        equipos.add(new Equipo("McLaren", "Reino Unido", "Mercedes", Arrays.asList(7, 8), ""));
-        equipos.add(new Equipo("Aston Martin", "Reino Unido", "Mercedes", Arrays.asList(9, 10), ""));
-        equipos.add(new Equipo("Alpine", "Francia", "Renault", Arrays.asList(11, 12), ""));
-        equipos.add(new Equipo("Alfa Romeo", "Suiza", "Ferrari", Arrays.asList(13, 14), ""));
-        equipos.add(new Equipo("Haas", "Estados Unidos", "Ferrari", Arrays.asList(15, 16), ""));
-        equipos.add(new Equipo("AlphaTauri", "Italia", "Honda", Arrays.asList(17, 18), ""));
-        equipos.add(new Equipo("Williams", "Reino Unido", "Mercedes", Arrays.asList(19, 20), ""));
-        return equipos;
+        return Arrays.asList(
+                new Equipo("Red Bull Racing", "Austria", "Honda", Arrays.asList(1, 2), ""),
+                new Equipo("Mercedes-AMG Petronas", "Alemania", "Mercedes", Arrays.asList(3, 4), ""),
+                new Equipo("Ferrari", "Italia", "Ferrari", Arrays.asList(5, 6), ""),
+                new Equipo("McLaren", "Reino Unido", "Mercedes", Arrays.asList(7, 8), ""),
+                new Equipo("Aston Martin", "Reino Unido", "Mercedes", Arrays.asList(9, 10), ""),
+                new Equipo("Alpine", "Francia", "Renault", Arrays.asList(11, 12), ""),
+                new Equipo("Alfa Romeo", "Suiza", "Ferrari", Arrays.asList(13, 14), ""),
+                new Equipo("Haas", "Estados Unidos", "Ferrari", Arrays.asList(15, 16), ""),
+                new Equipo("AlphaTauri", "Italia", "Honda", Arrays.asList(17, 18), ""),
+                new Equipo("Williams", "Reino Unido", "Mercedes", Arrays.asList(19, 20), "")
+        );
     }
+
 
     private static List<Circuito> crearCircuitosIniciales() {
         List<Circuito> circuitos = new ArrayList<>();
