@@ -25,6 +25,7 @@ public class PanelSimulacion extends JPanel {
     private Map<String, Circuito> circuitos;
 
     private JComboBox<Circuito> comboCircuito;
+    private JComboBox<String> comboVehiculo;
     private JComboBox<String> comboModo;
     private JComboBox<String> comboClima;
     private JComboBox<String> comboAero;
@@ -60,8 +61,19 @@ public class PanelSimulacion extends JPanel {
         panelControles.add(lblCircuito);
 
         comboCircuito = new JComboBox<>(circuitos.values().toArray(new Circuito[0]));
-        comboCircuito.setPreferredSize(new Dimension(150, 28));
+        comboCircuito.setPreferredSize(new Dimension(130, 28));
         panelControles.add(comboCircuito);
+
+        panelControles.add(new JLabel("Vehiculo:"));
+        List<String> opcionesVehiculo = new ArrayList<>();
+        opcionesVehiculo.add("Auto del Equipo");
+        for (Vehiculo v : vehiculos.values()) {
+            String clave = v.equipo + " - " + v.modelo;
+            opcionesVehiculo.add(clave);
+        }
+        comboVehiculo = new JComboBox<>(opcionesVehiculo.toArray(new String[0]));
+        comboVehiculo.setPreferredSize(new Dimension(130, 28));
+        panelControles.add(comboVehiculo);
 
         panelControles.add(new JLabel("Modo:"));
         comboModo = new JComboBox<>(new String[]{"normal", "agresiva", "ahorro"});
@@ -90,6 +102,7 @@ public class PanelSimulacion extends JPanel {
         comboEstrategia.setSelectedItem("balanceada");
         comboEstrategia.setPreferredSize(new Dimension(90, 28));
         panelControles.add(comboEstrategia);
+
 
         // Fila 2: Botones de Acción
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 2));
@@ -238,8 +251,21 @@ public class PanelSimulacion extends JPanel {
         List<ResultadoClasificacion> nuevosResultados = new ArrayList<>();
         String fecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
+        String vehiculoSeleccionado = (String) comboVehiculo.getSelectedItem();
+
         for (Piloto piloto : pilotos.values()) {
-            Vehiculo vehiculo = buscarVehiculoDeEquipo(piloto.equipo);
+            Vehiculo vehiculo = null;
+            if (vehiculoSeleccionado != null && !"Auto del Equipo".equals(vehiculoSeleccionado) && vehiculos.containsKey(vehiculoSeleccionado)) {
+                vehiculo = vehiculos.get(vehiculoSeleccionado);
+            } else if (piloto.vehiculoAsignado != null && !piloto.vehiculoAsignado.trim().isEmpty()) {
+                String clave = piloto.equipo + " - " + piloto.vehiculoAsignado;
+                if (vehiculos.containsKey(clave)) {
+                    vehiculo = vehiculos.get(clave);
+                }
+            }
+            if (vehiculo == null) {
+                vehiculo = buscarVehiculoDeEquipo(piloto.equipo);
+            }
             if (vehiculo == null) continue;
 
             double tiempo = calcularTiempoVuelta(piloto, vehiculo, circuito, modo, clima, aero, presion, estrategia);
@@ -247,6 +273,7 @@ public class PanelSimulacion extends JPanel {
             nuevosResultados.add(new ResultadoClasificacion(fecha, piloto.nombre, vehiculo.modelo,
                     circuito.nombre, clima, modo, tiempo, 1, aero, presion, estrategia));
         }
+
 
         if (filas.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ningun piloto tiene un vehiculo asignado a su equipo.");
