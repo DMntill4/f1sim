@@ -25,13 +25,14 @@ f1sim/
     ├── model/                     <- clases de datos (Piloto, Equipo, Vehiculo, Circuito, etc.)
     ├── datos/GestorDatos.java     <- lectura/escritura de JSON con Gson
     └── ui/                        <- pantallas Swing (una por pestaña)
-        ├── VentanaPrincipal.java
-        ├── PanelPilotos.java
-        ├── PanelEquipos.java
-        ├── PanelVehiculos.java    <- aquí está la vista visual de los autos
-        ├── PanelCircuitos.java
-        └── PanelSimulacion.java
-```
+
+## Estrategia de Ramas Git (Git Flow & Feature Branches)
+
+El desarrollo del proyecto `f1sim` se organiza según la siguiente estructura de ramas:
+- `main`: Rama de producción con código completamente probado y estable.
+- `develop`: Rama de integración para el trabajo continuo de desarrollo.
+- `feature/*`: Ramas específicas por cada módulo funcional (ej. `feature/core-data-improvements`, `feature/telemetry-weather`, `feature/pitstop-strategy`, `feature/live-telemetry-ui`).
+
 
 ## Cómo ejecutarlo
 
