@@ -152,23 +152,22 @@ public class PanelSimulacion extends JPanel {
 
     private double calcularTiempoVuelta(Piloto piloto, Vehiculo vehiculo, Circuito circuito, String modoNombre, String clima, String aero, String presion, String estrategia) {
         ModoConduccion modo = vehiculo.obtenerModo(modoNombre);
-        double velocidad = modo.velocidadPromedioKmh > 0 ? modo.velocidadPromedioKmh : 250;
+        double velocidad = modo.velocidadPromedioKmh > 0 ? modo.velocidadPromedioKmh : 250.0;
 
-        // Consumo y Desgaste desde el modelo JSON segun el clima
         double consumoClima = modo.consumoCombustible != null ? modo.consumoCombustible.obtenerPorClima(clima) : 1.0;
         double desgasteClima = modo.desgasteNeumaticos != null ? modo.desgasteNeumaticos.obtenerPorClima(clima) : 1.0;
         double factorAbrasivo = circuito.factorAbrasividad > 0 ? circuito.factorAbrasividad : 1.0;
 
-        // Penalizacion/beneficio por desgaste y consumo del modelo
-        double factorRendimientoModelo = 1.0 + ((consumoClima * 0.002) + (desgasteClima * 0.003)) * factorAbrasivo;
-
-        double tiempoBaseSegundos = (circuito.longitudKm / velocidad) * 3600.0 * factorRendimientoModelo;
+        double factorRendimiento = 1.0 + ((consumoClima * 0.002) + (desgasteClima * 0.003)) * factorAbrasivo;
+        double tiempoBaseSegundos = (circuito.longitudKm / velocidad) * 3600.0 * factorRendimiento;
 
         double factorClima = 1.0;
-        if (clima.equalsIgnoreCase("lluvioso")) factorClima = 1.08;
-        else if (clima.equalsIgnoreCase("extremo")) factorClima = 1.18;
+        if ("lluvioso".equalsIgnoreCase(clima)) {
+            factorClima = 1.08;
+        } else if ("extremo".equalsIgnoreCase(clima)) {
+            factorClima = 1.18;
+        }
 
-        // Factor Carga Aerodinamica
         double factorAero = 1.0;
         if ("alta".equalsIgnoreCase(aero)) {
             factorAero = "lluvioso".equalsIgnoreCase(clima) ? 0.985 : 0.993;
@@ -176,7 +175,6 @@ public class PanelSimulacion extends JPanel {
             factorAero = 0.990;
         }
 
-        // Factor Presion Neumaticos
         double factorPresion = 1.0;
         if ("alta".equalsIgnoreCase(presion)) {
             factorPresion = 0.995;
@@ -184,7 +182,6 @@ public class PanelSimulacion extends JPanel {
             factorPresion = "lluvioso".equalsIgnoreCase(clima) ? 0.988 : 1.002;
         }
 
-        // Factor Estrategia de Combustible
         double factorEstrategia = 1.0;
         if ("agresiva".equalsIgnoreCase(estrategia)) {
             factorEstrategia = 0.992;
@@ -192,15 +189,14 @@ public class PanelSimulacion extends JPanel {
             factorEstrategia = 1.008;
         }
 
-        // Factor Habilidad y Experiencia del Piloto
-        int experiencia = Math.min(piloto.experiencia, 15);
-        int habilidad = piloto.nivelHabilidad > 0 ? piloto.nivelHabilidad : 85;
-        double factorPiloto = 1.0 - (experiencia * 0.002) - ((habilidad - 50) * 0.0004);
+        int exp = Math.min(piloto.experiencia, 15);
+        int hab = piloto.nivelHabilidad > 0 ? piloto.nivelHabilidad : 85;
+        double factorPiloto = 1.0 - (exp * 0.002) - ((hab - 50) * 0.0004);
+        double factorVariacion = 1.0 + ((Math.random() - 0.5) * 0.03);
 
-        double factorAleatorio = 1.0 + ((Math.random() - 0.5) * 0.03);
-
-        return tiempoBaseSegundos * factorClima * factorAero * factorPresion * factorEstrategia * factorPiloto * factorAleatorio;
+        return tiempoBaseSegundos * factorClima * factorAero * factorPresion * factorEstrategia * factorPiloto * factorVariacion;
     }
+
 
     private String formatearTiempo(double segundosTotales) {
         int minutos = (int) (segundosTotales / 60);
