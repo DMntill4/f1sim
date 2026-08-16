@@ -37,10 +37,16 @@ public enum TipoNeumatico {
 
     public double calcularAgarreEfectivo(double porcentajeDesgaste, String condicionClimaticas) {
         double desgasteImpacto = Math.max(0.4, 1.0 - (porcentajeDesgaste * tasaDegradacion));
-        boolean esLluviaPista = "Lluvia".equalsIgnoreCase(condicionClimaticas);
-        boolean esLluviaGoma = "Lluvia".equalsIgnoreCase(condicionOptima);
-        double penClima = (esLluviaPista && !esLluviaGoma) ? 0.60 : (!esLluviaPista && esLluviaGoma ? 0.70 : 1.0);
-        return factorAgarreBase * desgasteImpacto * penClima;
+        double penalizacionClima = 1.0;
+        
+        if ("Lluvia".equalsIgnoreCase(condicionClimaticas) && !"Lluvia".equalsIgnoreCase(condicionOptima)) {
+            penalizacionClima = 0.60;
+        } else if ("Seco".equalsIgnoreCase(condicionClimaticas) && "Lluvia".equalsIgnoreCase(condicionOptima)) {
+            penalizacionClima = 0.70;
+        }
+        
+        return factorAgarreBase * desgasteImpacto * penalizacionClima;
     }
+
 
 }
