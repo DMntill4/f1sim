@@ -29,25 +29,12 @@ public class Vehiculo {
     }
 
     public double calcularRendimientoTermico(String modoConduccion, String clima) {
-        // Ajuste de temperatura según agresividad
-        if ("agresiva".equalsIgnoreCase(modoConduccion)) {
-            temperaturaNeumaticosC = Math.min(130.0, temperaturaNeumaticosC + 2.5);
-        } else if ("ahorro".equalsIgnoreCase(modoConduccion)) {
-            temperaturaNeumaticosC = Math.max(70.0, temperaturaNeumaticosC - 1.5);
-        }
+        if ("agresiva".equalsIgnoreCase(modoConduccion)) temperaturaNeumaticosC = Math.min(130.0, temperaturaNeumaticosC + 2.5);
+        else if ("ahorro".equalsIgnoreCase(modoConduccion)) temperaturaNeumaticosC = Math.max(70.0, temperaturaNeumaticosC - 1.5);
 
-        // Penalización si los neumáticos están sobrecalentados (> 110°C) o muy fríos (< 80°C)
-        double factorTemperatura = 1.0;
-        if (temperaturaNeumaticosC > 110.0) {
-            factorTemperatura = 0.90; // Degrada agarre por sobrecalentamiento
-        } else if (temperaturaNeumaticosC < 80.0) {
-            factorTemperatura = 0.92; // Falta de temperatura
-        }
-
-        double agarreBase = tipoNeumatico.calcularAgarreEfectivo(porcentajeDesgasteNeumatico, clima);
-        return agarreBase * factorTemperatura;
+        double factorTemp = temperaturaNeumaticosC > 110.0 ? 0.90 : (temperaturaNeumaticosC < 80.0 ? 0.92 : 1.0);
+        return tipoNeumatico.calcularAgarreEfectivo(porcentajeDesgasteNeumatico, clima) * factorTemp;
     }
-
 
     @Override
     public String toString() {
@@ -55,14 +42,10 @@ public class Vehiculo {
     }
 
     public ModoConduccion obtenerModo(String nombreModo) {
-        if ("agresiva".equalsIgnoreCase(nombreModo)) {
-            return agresiva != null ? agresiva : new ModoConduccion();
-        } else if ("ahorro".equalsIgnoreCase(nombreModo)) {
-            return ahorro != null ? ahorro : new ModoConduccion();
-        } else {
-            return normal != null ? normal : new ModoConduccion();
-        }
+        ModoConduccion m = "agresiva".equalsIgnoreCase(nombreModo) ? agresiva : ("ahorro".equalsIgnoreCase(nombreModo) ? ahorro : normal);
+        return m != null ? m : new ModoConduccion();
     }
+
 
     public boolean esValido() {
         return equipo != null && !equipo.isEmpty() && modelo != null && !modelo.isEmpty() && velocidadMaximaKmh > 0;
