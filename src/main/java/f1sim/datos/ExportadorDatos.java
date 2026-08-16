@@ -12,15 +12,16 @@ public class ExportadorDatos {
 
     public static boolean exportarACSV(String rutaArchivo, List<ResultadoClasificacion> resultados) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(rutaArchivo))) {
-            writer.println("Posicion,Piloto,Equipo,TiempoVuelta,ModoConduccion,Clima");
+            writer.println("Fecha,Piloto,Vehiculo,Circuito,TiempoSegundos,ModoConduccion,Clima");
             for (ResultadoClasificacion r : resultados) {
-                writer.printf("%d,%s,%s,%s,%s,%s%n",
-                        r.posicion,
-                        r.nombrePiloto,
-                        r.nombreEquipo,
-                        r.tiempoFormateado,
-                        r.modoConduccion,
-                        r.clima);
+                writer.printf("%s,%s,%s,%s,%.3f,%s,%s%n",
+                        r.fecha != null ? r.fecha : "",
+                        r.piloto != null ? r.piloto : "",
+                        r.vehiculo != null ? r.vehiculo : "",
+                        r.circuito != null ? r.circuito : "",
+                        r.tiempoVueltaSegundos,
+                        r.modo != null ? r.modo : "",
+                        r.clima != null ? r.clima : "");
             }
             return true;
         } catch (IOException e) {
@@ -28,4 +29,5 @@ public class ExportadorDatos {
             return false;
         }
     }
+
 }
