@@ -17,7 +17,7 @@ public class DatosCondicion {
 
     // Devuelve el valor segun el nombre del clima
     public double obtenerPorClima(String clima) {
-        if (clima.equalsIgnoreCase("lluvioso")) {
+        if (clima.equalsIgnoreCase("lluvioso") || clima.equalsIgnoreCase("lluvia")) {
             return lluvioso;
         } else if (clima.equalsIgnoreCase("extremo")) {
             return extremo;
@@ -25,4 +25,12 @@ public class DatosCondicion {
             return seco;
         }
     }
+
+    public static String simularCambioClima(String climaActual, double probabilidadCambio) {
+        if (Math.random() < probabilidadCambio) {
+            return "seco".equalsIgnoreCase(climaActual) ? "lluvioso" : "seco";
+        }
+        return climaActual;
+    }
 }
+
