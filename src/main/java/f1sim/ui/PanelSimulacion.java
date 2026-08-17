@@ -246,6 +246,18 @@ public class PanelSimulacion extends JPanel {
         return null;
     }
 
+    private Vehiculo resolverVehiculoParaPiloto(Piloto piloto, String vehiculoSeleccionado) {
+        if (vehiculoSeleccionado != null && !"Auto del Equipo".equals(vehiculoSeleccionado) && vehiculos.containsKey(vehiculoSeleccionado)) {
+            return vehiculos.get(vehiculoSeleccionado);
+        }
+        if (piloto.vehiculoAsignado != null && !piloto.vehiculoAsignado.trim().isEmpty()) {
+            String clave = piloto.equipo + " - " + piloto.vehiculoAsignado;
+            if (vehiculos.containsKey(clave)) return vehiculos.get(clave);
+        }
+        return buscarVehiculoDeEquipo(piloto.equipo);
+    }
+
+
     private void simularClasificacion() {
         Circuito circuito = (Circuito) comboCircuito.getSelectedItem();
         String modo = (String) comboModo.getSelectedItem();
@@ -276,18 +288,7 @@ public class PanelSimulacion extends JPanel {
         String vehiculoSeleccionado = (String) comboVehiculo.getSelectedItem();
 
         for (Piloto piloto : pilotos.values()) {
-            Vehiculo vehiculo = null;
-            if (vehiculoSeleccionado != null && !"Auto del Equipo".equals(vehiculoSeleccionado) && vehiculos.containsKey(vehiculoSeleccionado)) {
-                vehiculo = vehiculos.get(vehiculoSeleccionado);
-            } else if (piloto.vehiculoAsignado != null && !piloto.vehiculoAsignado.trim().isEmpty()) {
-                String clave = piloto.equipo + " - " + piloto.vehiculoAsignado;
-                if (vehiculos.containsKey(clave)) {
-                    vehiculo = vehiculos.get(clave);
-                }
-            }
-            if (vehiculo == null) {
-                vehiculo = buscarVehiculoDeEquipo(piloto.equipo);
-            }
+            Vehiculo vehiculo = resolverVehiculoParaPiloto(piloto, vehiculoSeleccionado);
             if (vehiculo == null) continue;
 
             double tiempo = calcularTiempoVuelta(piloto, vehiculo, circuito, modo, clima, aero, presion, estrategia);
@@ -296,21 +297,13 @@ public class PanelSimulacion extends JPanel {
                     circuito.nombre, clima, modo, tiempo, 1, aero, presion, estrategia));
         }
 
-
         if (filas.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ningun piloto tiene un vehiculo asignado a su equipo.");
             return;
         }
 
-        // Ordenación por tiempo de menor a mayor (más rápido a más lento)
-        filas.sort(new Comparator<Object[]>() {
-            @Override
-            public int compare(Object[] o1, Object[] o2) {
-                double t1 = (Double) o1[4];
-                double t2 = (Double) o2[4];
-                return Double.compare(t1, t2);
-            }
-        });
+        filas.sort((o1, o2) -> Double.compare((Double) o1[4], (Double) o2[4]));
+
 
         modeloResultados.setRowCount(0);
         int posicion = 1;
