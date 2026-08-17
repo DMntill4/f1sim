@@ -77,9 +77,9 @@ public class PanelCarrera extends JPanel {
         add(construirTorrePosiciones(), BorderLayout.EAST);
 
         timer = new javax.swing.Timer(35, e -> procesarColaYActualizar());
-        F1SonidoMotor.iniciarMotor();
 
         // Cargar estado inicial de la tabla con todos los pilotos registrados
+
         inicializarEstadoParrilla();
     }
 
@@ -233,10 +233,9 @@ public class PanelCarrera extends JPanel {
     }
 
     private void alternarSonido() {
-        boolean silenciado = F1SonidoMotor.isSilenciado();
-        F1SonidoMotor.setSilenciado(!silenciado);
-        botonSonido.setText(!silenciado ? "AUDIO: OFF" : "AUDIO: ON");
+        botonSonido.setText("AUDIO: OFF");
     }
+
 
     private JPanel construirTorrePosiciones() {
         JPanel panel = F1Theme.createCardPanel();
@@ -533,11 +532,8 @@ public class PanelCarrera extends JPanel {
         pistaVisual.repaint();
         actualizarTablaPosiciones();
 
-        if (!pilotosCarrera.isEmpty() && ultimosEventos.containsKey(pilotosCarrera.get(0).nombre)) {
-            F1SonidoMotor.actualizarVelocidad(ultimosEventos.get(pilotosCarrera.get(0).nombre).velocidadKmh);
-        }
-
         if (!pilotosCarrera.isEmpty() && finalizados.size() == pilotosCarrera.size()) {
+
             detenerCarrera("Carrera Finalizada");
             etiquetaEstadoFlag.setText(" CHECKERED FLAG ");
             etiquetaEstadoFlag.setBackground(F1Theme.TEXT_WHITE);
@@ -680,8 +676,8 @@ public class PanelCarrera extends JPanel {
             h.detener();
         }
         timer.stop();
-        F1SonidoMotor.actualizarVelocidad(0);
         botonIniciar.setEnabled(true);
+
         botonPausa.setEnabled(false);
         botonSaltarMeta.setEnabled(false);
         botonDetener.setEnabled(false);
