@@ -8,10 +8,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 
 public class PanelVehiculos extends JPanel {
 
@@ -226,22 +226,17 @@ public class PanelVehiculos extends JPanel {
     }
 
     private void cargarImagen(String urlImagen) {
-        if (urlImagen == null || urlImagen.trim().isEmpty()) {
-            etiquetaImagen.setIcon(null);
-            etiquetaImagen.setText("Sin imagen disponible");
-            return;
-        }
-        try {
-            URL url = java.net.URI.create(urlImagen).toURL();
-            ImageIcon iconoOriginal = new ImageIcon(url);
+        etiquetaImagen.setIcon(null);
+        if (urlImagen != null && !urlImagen.trim().isEmpty() && new java.io.File(urlImagen).exists()) {
+            ImageIcon iconoOriginal = new ImageIcon(urlImagen);
             Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(300, 180, Image.SCALE_SMOOTH);
             etiquetaImagen.setIcon(new ImageIcon(imagenEscalada));
             etiquetaImagen.setText("");
-        } catch (Exception ex) {
-            etiquetaImagen.setIcon(null);
-            etiquetaImagen.setText("No se pudo cargar la imagen");
+        } else {
+            etiquetaImagen.setText("Ficha Técnica de Monoplaza F1");
         }
     }
+
 
     private ModoConduccion pedirModoConduccion(String titulo, ModoConduccion base) {
         JTextField campoVelocidad = new JTextField(String.valueOf(base != null ? base.velocidadPromedioKmh : 250));
